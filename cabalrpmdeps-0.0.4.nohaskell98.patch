@@ -1,0 +1,76 @@
+--- cabalrpmdeps-0.0.4/cabalrpmdeps.cabal.nohaskell98	2008-12-04 10:25:54.000000000 +0300
++++ cabalrpmdeps-0.0.4/cabalrpmdeps.cabal	2012-11-13 20:58:51.761398501 +0400
+@@ -12,7 +12,7 @@ Stability: Beta
+ Hs-Source-Dirs: .
+ Exposed-Modules: Distribution.RpmDeps
+ Extensions: CPP
+-Build-Depends: haskell98, base, Cabal, filepath
++Build-Depends: base, Cabal, filepath, directory
+ -- Cabal will automatically add unix here on non-Windows platforms
+ GHC-Options: -O2
+ build-type: Simple
+--- cabalrpmdeps-0.0.4/Distribution/RpmDeps.hs.nohaskell98	2008-12-04 10:25:54.000000000 +0300
++++ cabalrpmdeps-0.0.4/Distribution/RpmDeps.hs	2012-11-13 21:00:44.528357121 +0400
+@@ -16,7 +16,7 @@ import Distribution.Simple.Configure
+ -- -> packageDeps
+ import Distribution.Simple.LocalBuildInfo
+ -- -> GetDirectoryContents
+-import Directory
++import System.Directory
+ import System.FilePath
+ import Distribution.Text
+ 
+diff -up cabalrpmdeps-0.0.4/cabalrpmbr.hs.orig cabalrpmdeps-0.0.4/cabalrpmbr.hs
+--- cabalrpmdeps-0.0.4/cabalrpmbr.hs.orig	2012-11-14 09:14:31.000000000 +0200
++++ cabalrpmdeps-0.0.4/cabalrpmbr.hs	2012-11-14 09:20:50.000000000 +0200
+@@ -1,8 +1,8 @@
+ module Main where
+ 
+ import Distribution.RpmDeps
+-import System
+-import Monad
++import System.Environment
++import Control.Monad
+ 
+ main = do
+     args <- getArgs
+diff -up cabalrpmdeps-0.0.4/cabalrpmprov.hs.orig cabalrpmdeps-0.0.4/cabalrpmprov.hs
+--- cabalrpmdeps-0.0.4/cabalrpmprov.hs.orig	2012-11-14 09:14:31.000000000 +0200
++++ cabalrpmdeps-0.0.4/cabalrpmprov.hs	2012-11-14 09:20:17.000000000 +0200
+@@ -1,8 +1,8 @@
+ module Main where
+ 
+ import Distribution.RpmDeps
+-import System
+-import Monad
++import System.Environment
++import Control.Monad
+ 
+ main = do
+     args <- getArgs
+diff -up cabalrpmdeps-0.0.4/cabalrpmreq.hs.orig cabalrpmdeps-0.0.4/cabalrpmreq.hs
+--- cabalrpmdeps-0.0.4/cabalrpmreq.hs.orig	2012-11-14 09:14:31.000000000 +0200
++++ cabalrpmdeps-0.0.4/cabalrpmreq.hs	2012-11-14 09:19:55.000000000 +0200
+@@ -1,8 +1,8 @@
+ module Main where
+ 
+ import Distribution.RpmDeps
+-import System
+-import Monad
++import System.Environment
++import Control.Monad
+ 
+ main = do
+     args <- getArgs
+diff -up cabalrpmdeps-0.0.4/Distribution/RpmDeps.hs.orig cabalrpmdeps-0.0.4/Distribution/RpmDeps.hs
+--- cabalrpmdeps-0.0.4/Distribution/RpmDeps.hs.orig	2012-11-14 09:16:14.000000000 +0200
++++ cabalrpmdeps-0.0.4/Distribution/RpmDeps.hs	2012-11-14 09:19:06.000000000 +0200
+@@ -27,7 +27,7 @@ rpmrequires cabalfile = do
+     buildinfo <- maybeGetPersistBuildConfig =<< findcabal cabalfile
+     return $ case buildinfo of
+         Nothing -> []
+-        Just bi -> map package2rpmdep (packageDeps bi)
++        Just bi -> map (package2rpmdep . snd) (externalPackageDeps bi)
+ 
+ rpmprovides :: Maybe FilePath -> IO [String]
+ rpmprovides cabalfile = do
