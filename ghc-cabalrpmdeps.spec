@@ -5,7 +5,7 @@
 Summary:	Tools to build rpm dependencies from Cabal
 Name:		ghc-%{module}
 Version:	0.0.4
-Release:	13
+Release:	14
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://hackage.haskell.org/package/%{module}
