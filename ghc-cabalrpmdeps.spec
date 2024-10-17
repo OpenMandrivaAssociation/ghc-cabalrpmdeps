@@ -8,7 +8,7 @@ Version:	0.0.4
 Release:	14
 License:	GPLv2+
 Group:		Development/Other
-Url:		http://hackage.haskell.org/package/%{module}
+Url:		https://hackage.haskell.org/package/%{module}
 Source0:	http://hackage.haskell.org/packages/archive/%{module}/%{version}/%{module}-%{version}.tar.gz
 Source10:	%{name}.rpmlintrc
 # actualize code for ghc-7.6.1
